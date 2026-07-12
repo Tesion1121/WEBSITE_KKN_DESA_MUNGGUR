@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Struktur Desa - Desa Munggur | Kecamatan Andong, Kabupaten Boyolali</title>
+  <meta name="description" content="Struktur organisasi BPD Desa Munggur, Kecamatan Andong, Kabupaten Boyolali." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+  <style>
+    /* ==================== ORG CHART ==================== */
+    .org-tree {
+      padding: 12px 0 32px;
+      overflow-x: auto;
+    }
+
+    /* Each level row */
+    .org-row {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      position: relative;
+    }
+
+    /* Vertical connector FROM card above */
+    .org-row-connector {
+      display: flex;
+      justify-content: center;
+      margin: 0;
+    }
+    .vline { width: 2px; height: 28px; background: #d1d5db; }
+
+    /* Horizontal line spanning between two children */
+    .hline-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      position: relative;
+    }
+    .hline {
+      height: 2px;
+      background: #d1d5db;
+      position: absolute;
+      top: 0;
+    }
+
+    /* Node */
+    .org-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .org-card {
+      background: #fff;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px 18px 14px;
+      width: 160px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .org-card:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+      border-color: #2d6a4f;
+    }
+    .org-card.ketua-card {
+      border-color: #2d6a4f;
+      border-width: 2px;
+      width: 175px;
+    }
+
+    .org-jabatan {
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: #2d6a4f;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .ketua-card .org-jabatan { color: #1b4332; }
+
+    .org-photo {
+      width: 62px; height: 62px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      margin: 0 auto 8px;
+      display: flex; align-items: center; justify-content: center;
+      border: 2.5px solid #d1d5db;
+      overflow: hidden;
+    }
+    .ketua-card .org-photo {
+      width: 70px; height: 70px;
+      border-color: #2d6a4f;
+    }
+    .org-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+    .org-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.3;
+    }
+
+    /* ---- Tree connector kit ---- */
+    .tree-ketua { margin-bottom: 0; }
+
+    .tree-mid-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* The horizontal bar connecting row-2 nodes */
+    .h-bar-row2 {
+      position: relative;
+      height: 2px;
+      background: #d1d5db;
+      width: 230px; /* tuned for 2 nodes with gap */
+      margin: 0 auto;
+    }
+    .h-bar-row3 {
+      position: relative;
+      height: 2px;
+      background: #d1d5db;
+      width: 230px;
+      margin: 0 auto;
+    }
+
+    /* Downward ticks on h-bar */
+    .h-bar-row2::before,
+    .h-bar-row2::after,
+    .h-bar-row3::before,
+    .h-bar-row3::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 2px;
+      height: 28px;
+      background: #d1d5db;
+    }
+    .h-bar-row2::before, .h-bar-row3::before { left: 0; }
+    .h-bar-row2::after, .h-bar-row3::after  { right: 0; }
+
+    .spacer-v { height: 28px; }
+
+    .org-note {
+      background: #f8f9fa;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 0.82rem;
+      color: #6c757d;
+      font-style: italic;
+      margin-top: 40px;
+      text-align: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Loading state */
+    .org-skeleton {
+      width: 160px; height: 160px;
+      background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 12px;
+    }
+    @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+
+    @media (max-width: 600px) {
+      .org-card { width: 130px; }
+      .h-bar-row2, .h-bar-row3 { width: 180px; }
+      .org-row { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="main-navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-brand">
+        <img src="../assets/images/boyolali-logo.svg" alt="Logo Kabupaten Boyolali" class="navbar-logo" />
+        <div class="navbar-title"><span class="navbar-desa">Desa Munggur</span><span class="navbar-kabupaten">Kabupaten Boyolali</span></div>
+      </a>
+      <nav class="navbar-nav">
+        <a href="../index.html" class="nav-link">Beranda</a>
+        <a href="profil-desa.html" class="nav-link">Profil Desa</a>
+        <a href="struktur-desa.html" class="nav-link active">Struktur Desa</a>
+        <a href="potensi-desa.html" class="nav-link">Potensi Desa</a>
+        <a href="peta-desa.html" class="nav-link">Peta Desa</a>
+        <a href="umkm.html" class="nav-link">UMKM</a>
+        <a href="komoditas.html" class="nav-link">Komoditas</a>
+      </nav>
+      <div class="navbar-actions">
+        <a href="login.html" class="btn-login">Login</a>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle Menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="../index.html" class="mobile-nav-link">Beranda</a>
+      <a href="profil-desa.html" class="mobile-nav-link">Profil Desa</a>
+      <a href="struktur-desa.html" class="mobile-nav-link">Struktur Desa</a>
+      <a href="potensi-desa.html" class="mobile-nav-link">Potensi Desa</a>
+      <a href="peta-desa.html" class="mobile-nav-link">Peta Desa</a>
+      <a href="umkm.html" class="mobile-nav-link">UMKM</a>
+      <a href="komoditas.html" class="mobile-nav-link">Komoditas</a>
+      <a href="login.html" class="mobile-nav-link mobile-login">Login</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+      <div class="container">
+        <div class="page-header-inner">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" style="flex-shrink:0">
+            <rect x="8" y="2" width="8" height="4" rx="1"></rect>
+            <rect x="1" y="14" width="6" height="4" rx="1"></rect>
+            <rect x="9" y="14" width="6" height="4" rx="1"></rect>
+            <rect x="17" y="14" width="6" height="4" rx="1"></rect>
+            <path d="M12 6v4M4 14v-2h16v2"></path>
+          </svg>
+          <div>
+            <h1 class="page-header-title">Struktur Organisasi BPD</h1>
+            <p style="color:#6c757d;font-size:0.875rem;margin-top:4px;">Badan Permusyawaratan Desa Munggur · Masa Keanggotaan 2018–2024</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORG CHART CONTENT -->
+    <section class="page-main">
+      <div class="container">
+
+        <div class="org-tree" id="org-tree">
+
+          <!-- ===== LEVEL 1: KETUA ===== -->
+          <div class="org-row tree-ketua">
+            <div class="org-node">
+              <div class="org-card ketua-card" id="org-ketua">
+                <p class="org-jabatan">Ketua</p>
+                <div class="org-photo" id="photo-ketua">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </div>
+                <p class="org-name" id="name-ketua">Memuat...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connector: Ketua → Level 2 -->
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div style="width:2px;height:28px;background:#d1d5db;"></div>
+            <div class="h-bar-row2"></div>
+          </div>
+
+          <!-- ===== LEVEL 2: WAKIL KETUA & SEKRETARIS ===== -->
+          <div style="height:28px;"></div>
+          <div class="org-row">
+            <!-- Wakil Ketua -->
+            <div class="org-node">
+              <div class="org-card" id="org-wakil-ketua">
+                <p class="org-jabatan">Wakil Ketua</p>
+                <div class="org-photo" id="photo-wakil-ketua">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </div>
+                <p class="org-name" id="name-wakil-ketua">Memuat...</p>
+              </div>
+            </div>
+            <!-- Sekretaris -->
+            <div class="org-node">
+              <div class="org-card" id="org-sekretaris">
+                <p class="org-jabatan">Sekretaris</p>
+                <div class="org-photo" id="photo-sekretaris">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </div>
+                <p class="org-name" id="name-sekretaris">Memuat...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connector: Level 2 → Level 3 -->
+          <div style="display:flex;justify-content:center;gap:192px;margin-top:0;">
+            <div style="width:2px;height:28px;background:#d1d5db;"></div>
+            <div style="width:2px;height:28px;background:#d1d5db;"></div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:192px;">
+            <div class="h-bar-row3" style="width:0;"></div>
+          </div>
+
+          <!-- Horizontal connector row 3 (separate rendering) -->
+          <div style="display:flex;justify-content:center;margin-top:0;">
+            <div style="position:relative;width:230px;height:2px;background:#d1d5db;display:flex;align-items:flex-start;">
+              <div style="width:2px;height:28px;background:#d1d5db;position:absolute;left:0;top:0;"></div>
+              <div style="width:2px;height:28px;background:#d1d5db;position:absolute;right:0;top:0;"></div>
+            </div>
+          </div>
+
+          <!-- ===== LEVEL 3: BID. PEMDES & BANGDES ===== -->
+          <div style="height:28px;"></div>
+          <div class="org-row">
+            <!-- Bid. Pemdes & Binmas -->
+            <div class="org-node">
+              <div class="org-card" id="org-bid-pemdes">
+                <p class="org-jabatan">Bid. Pemdes &amp; Binmas</p>
+                <div class="org-photo" id="photo-bid-pemdes">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </div>
+                <p class="org-name" id="name-bid-pemdes">Memuat...</p>
+              </div>
+            </div>
+            <!-- Bid. Bangdes & Permasdes -->
+            <div class="org-node">
+              <div class="org-card" id="org-bid-bangdes">
+                <p class="org-jabatan">Bid. Bangdes &amp; Permasdes</p>
+                <div class="org-photo" id="photo-bid-bangdes">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </div>
+                <p class="org-name" id="name-bid-bangdes">Memuat...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Note -->
+          <div class="org-note" id="org-note">
+            Data foto dan nama perangkat BPD diperbarui melalui panel administrator. Hubungi admin untuk perubahan data.
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3 class="footer-brand-name">Desa Munggur</h3>
+          <p class="footer-brand-desc">Kecamatan Andong, Kabupaten Boyolali, Jawa Tengah.</p>
+          <p class="footer-brand-desc">Sistem Informasi Profil Desa resmi untuk masyarakat.</p>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col-title">Support</h4>
+          <ul class="footer-links">
+            <li>Jl. Munggur No. 1, Andong, Boyolali</li>
+            <li><a href="mailto:desamunggur15@gmail.com" class="footer-link">desamunggur15@gmail.com</a></li>
+            <li><a href="tel:+6281234567890" class="footer-link">+62 812-3456-7890</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col-title">Menu Utama</h4>
+          <ul class="footer-links">
+            <li><a href="profil-desa.html" class="footer-link">Profil Desa</a></li>
+            <li><a href="struktur-desa.html" class="footer-link">Struktur Desa</a></li>
+            <li><a href="potensi-desa.html" class="footer-link">Potensi Desa</a></li>
+            <li><a href="peta-desa.html" class="footer-link">Peta Desa</a></li>
+            <li><a href="umkm.html" class="footer-link">UMKM</a></li>
+            <li><a href="komoditas.html" class="footer-link">Komoditas</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col-title">Account</h4>
+          <ul class="footer-links">
+            <li><a href="login.html" class="footer-link">My Account</a></li>
+            <li><a href="login.html" class="footer-link">Login</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2025 Desa Munggur. Hak Cipta Dilindungi.</p>
+        <p class="footer-credit">Dibuat dengan ❤ untuk masyarakat Desa Munggur</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="../assets/js/firebase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+
+  <script>
+    // ============================================================
+    // Peta jabatan → ID elemen HTML
+    // Kunci = nilai field "jabatan" di Firestore (case-insensitive trim)
+    // ============================================================
+    const jabatanMap = {
+      'ketua'                   : { nameId: 'name-ketua',        photoId: 'photo-ketua' },
+      'wakil ketua'             : { nameId: 'name-wakil-ketua',  photoId: 'photo-wakil-ketua' },
+      'sekretaris'              : { nameId: 'name-sekretaris',   photoId: 'photo-sekretaris' },
+      'bid. pemdes & binmas'    : { nameId: 'name-bid-pemdes',   photoId: 'photo-bid-pemdes' },
+      'bid. bangdes & permasdes': { nameId: 'name-bid-bangdes',  photoId: 'photo-bid-bangdes' },
+    };
+
+    const defaultAvatar = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
+
+    // Isi default "(Belum diisi)" jika tidak ada data
+    Object.values(jabatanMap).forEach(({ nameId }) => {
+      const el = document.getElementById(nameId);
+      if (el) el.textContent = '(Belum diisi)';
+    });
+
+    // Ambil dari Firestore
+    db.collection('perangkat_desa').get().then((snap) => {
+      snap.forEach((doc) => {
+        const data = doc.data();
+        const key  = (data.jabatan || '').toLowerCase().trim();
+        const map  = jabatanMap[key];
+        if (!map) return;
+
+        const nameEl  = document.getElementById(map.nameId);
+        const photoEl = document.getElementById(map.photoId);
+
+        if (nameEl)  nameEl.textContent = data.nama || '(Belum diisi)';
+        if (photoEl && data.imageUrl) {
+          photoEl.innerHTML = `<img src="${data.imageUrl}" alt="${data.nama || ''}" style="width:100%;height:100%;object-fit:cover;" />`;
+        } else if (photoEl) {
+          photoEl.innerHTML = defaultAvatar;
+        }
+      });
+    }).catch((err) => {
+      console.warn('Gagal memuat perangkat desa:', err.message);
+    });
+  </script>
+</body>
+</html>

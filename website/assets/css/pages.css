@@ -1,0 +1,268 @@
+/* ===================================================
+   pages.css — Styles for inner pages
+   =================================================== */
+
+/* ---- PROFIL DESA PAGE ---- */
+.profil-page-content {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  align-items: start;
+}
+
+.profil-page-main h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 28px 0 10px;
+  border-left: 4px solid #2d6a4f;
+  padding-left: 12px;
+}
+
+.profil-page-main h2:first-child {
+  margin-top: 0;
+}
+
+.profil-page-main p {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+
+.profil-page-main ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin-bottom: 16px;
+}
+
+.profil-page-main ul li {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.7;
+  margin-bottom: 4px;
+}
+
+/* Sidebar stat widget */
+.profil-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: sticky;
+  top: 90px;
+}
+
+.sidebar-stat {
+  background: #f8f9fa;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-stat-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sidebar-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #2d6a4f;
+  letter-spacing: -0.02em;
+}
+
+/* ---- PETA DESA PAGE ---- */
+.map-container {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid #e5e7eb;
+  background: #f0f0f0;
+}
+
+.map-container img,
+.map-container svg {
+  width: 100%;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+/* ---- STRUKTUR PAGE ---- */
+.org-chart-container {
+  width: 100%;
+  overflow-x: auto;
+  padding: 20px 0;
+}
+
+.org-level {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.org-card {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+  min-width: 160px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.org-card-jabatan {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #2d6a4f;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.org-card-photo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 8px;
+  background: #e5e7eb;
+  border: 2px solid #d1d5db;
+}
+
+.org-card-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* ---- UMKM PAGE ---- */
+.umkm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.umkm-card {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.22s ease;
+}
+
+.umkm-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+  border-color: #2d6a4f;
+}
+
+.umkm-card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #f0f0f0;
+}
+
+.umkm-card-body {
+  padding: 16px;
+}
+
+.umkm-card-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+}
+
+.umkm-card-desc {
+  font-size: 0.85rem;
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+.umkm-card-badge {
+  display: inline-block;
+  margin-top: 10px;
+  background: rgba(45, 106, 79, 0.1);
+  color: #2d6a4f;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* ---- KOMODITAS PAGE ---- */
+.komoditas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.komoditas-card {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  transition: all 0.22s ease;
+}
+
+.komoditas-card:hover {
+  border-color: #2d6a4f;
+  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.12);
+  transform: translateY(-3px);
+}
+
+.komoditas-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  margin: 0 auto 12px;
+}
+
+.komoditas-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.komoditas-desc {
+  font-size: 0.78rem;
+  color: #6c757d;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  .profil-page-content {
+    grid-template-columns: 1fr;
+  }
+
+  .profil-sidebar {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .umkm-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .komoditas-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .umkm-grid { grid-template-columns: 1fr; }
+  .komoditas-grid { grid-template-columns: repeat(2, 1fr); }
+  .profil-sidebar { grid-template-columns: 1fr; }
+}

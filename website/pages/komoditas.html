@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Komoditas - Desa Munggur</title>
+  <meta name="description" content="Komoditas pertanian unggulan Desa Munggur, Kecamatan Andong, Kabupaten Boyolali." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+</head>
+<body>
+  <header class="navbar" id="main-navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-brand">
+        <img src="../assets/images/boyolali-logo.svg" alt="Logo" class="navbar-logo" />
+        <div class="navbar-title"><span class="navbar-desa">Desa Munggur</span><span class="navbar-kabupaten">Kabupaten Boyolali</span></div>
+      </a>
+      <nav class="navbar-nav">
+        <a href="../index.html" class="nav-link">Beranda</a>
+        <a href="profil-desa.html" class="nav-link">Profil Desa</a>
+        <a href="struktur-desa.html" class="nav-link">Struktur Desa</a>
+        <a href="potensi-desa.html" class="nav-link">Potensi Desa</a>
+        <a href="peta-desa.html" class="nav-link">Peta Desa</a>
+        <a href="umkm.html" class="nav-link">UMKM</a>
+        <a href="komoditas.html" class="nav-link active">Komoditas</a>
+      </nav>
+      <div class="navbar-actions">
+        <a href="login.html" class="btn-login">Login</a>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="../index.html" class="mobile-nav-link">Beranda</a>
+      <a href="profil-desa.html" class="mobile-nav-link">Profil Desa</a>
+      <a href="struktur-desa.html" class="mobile-nav-link">Struktur Desa</a>
+      <a href="potensi-desa.html" class="mobile-nav-link">Potensi Desa</a>
+      <a href="peta-desa.html" class="mobile-nav-link">Peta Desa</a>
+      <a href="umkm.html" class="mobile-nav-link">UMKM</a>
+      <a href="komoditas.html" class="mobile-nav-link">Komoditas</a>
+      <a href="login.html" class="mobile-nav-link mobile-login">Login</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <div class="page-header-inner">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" style="flex-shrink:0">
+            <path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/>
+          </svg>
+          <div>
+            <h1 class="page-header-title">Komoditas Desa Munggur</h1>
+            <p style="color:#6c757d;font-size:0.875rem;margin-top:4px;">Hasil Pertanian Unggulan</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-main">
+      <div class="container">
+        <p style="color:#444;margin-bottom:32px;line-height:1.7;max-width:720px;">
+          Desa Munggur dikenal dengan hasil pertanian yang melimpah. Komoditas utama desa ini adalah padi sawah dan jagung yang menjadi tulang punggung perekonomian masyarakat setempat.
+        </p>
+
+        <div class="komoditas-grid" id="komoditas-grid">
+          <!-- Padi Sawah -->
+          <div class="komoditas-card" id="komoditas-padi">
+            <div style="width:72px;height:72px;margin:0 auto 14px;background:rgba(45,106,79,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+              <img src="../assets/images/foto1.svg" alt="Padi" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" onerror="this.style.display='none'" />
+            </div>
+            <p class="komoditas-name">Padi / Beras</p>
+            <p class="komoditas-desc">Komoditas utama dari lahan sawah yang tersebar di Desa Munggur</p>
+          </div>
+
+          <!-- Jagung -->
+          <div class="komoditas-card" id="komoditas-jagung">
+            <div style="width:72px;height:72px;margin:0 auto 14px;background:rgba(45,106,79,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+              <img src="../assets/images/foto2.svg" alt="Jagung" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" onerror="this.style.display='none'" />
+            </div>
+            <p class="komoditas-name">Jagung</p>
+            <p class="komoditas-desc">Tanaman palawija yang banyak dibudidayakan di lahan kering desa</p>
+          </div>
+
+          <!-- Komoditas 3 -->
+          <div class="komoditas-card" id="komoditas-sayuran">
+            <div style="width:72px;height:72px;margin:0 auto 14px;background:rgba(45,106,79,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="1.5"><path d="M7 17c0-4 5-15 5-15s5 11 5 15a5 5 0 0 1-10 0z"/></svg>
+            </div>
+            <p class="komoditas-name">Sayuran</p>
+            <p class="komoditas-desc">Berbagai jenis sayuran segar yang dihasilkan dari kebun warga</p>
+          </div>
+
+          <!-- Komoditas 4 -->
+          <div class="komoditas-card" id="komoditas-buah">
+            <div style="width:72px;height:72px;margin:0 auto 14px;background:rgba(45,106,79,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+            </div>
+            <p class="komoditas-name">Buah-buahan</p>
+            <p class="komoditas-desc">Berbagai buah tropis yang tumbuh subur di pekarangan warga desa</p>
+          </div>
+        </div>
+
+        <div style="margin-top:32px;background:#f8f9fa;border:1.5px solid #e5e7eb;border-radius:10px;padding:20px 24px;">
+          <p style="font-size:0.85rem;color:#6c757d;font-style:italic;">* Data komoditas akan diperbarui dan dilengkapi oleh administrator melalui sistem Firebase Firestore. Foto dan detail produk akan ditambahkan secara berkala.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><h3 class="footer-brand-name">Desa Munggur</h3><p class="footer-brand-desc">Kecamatan Andong, Kabupaten Boyolali, Jawa Tengah.</p></div>
+        <div class="footer-col"><h4 class="footer-col-title">Support</h4><ul class="footer-links"><li>Jl. Munggur No. 1, Andong, Boyolali</li><li><a href="mailto:desamunggur15@gmail.com" class="footer-link">desamunggur15@gmail.com</a></li><li><a href="tel:+6281234567890" class="footer-link">+62 812-3456-7890</a></li></ul></div>
+        <div class="footer-col"><h4 class="footer-col-title">Menu Utama</h4><ul class="footer-links"><li><a href="profil-desa.html" class="footer-link">Profil Desa</a></li><li><a href="struktur-desa.html" class="footer-link">Struktur Desa</a></li><li><a href="potensi-desa.html" class="footer-link">Potensi Desa</a></li><li><a href="peta-desa.html" class="footer-link">Peta Desa</a></li><li><a href="umkm.html" class="footer-link">UMKM</a></li><li><a href="komoditas.html" class="footer-link">Komoditas</a></li></ul></div>
+        <div class="footer-col"><h4 class="footer-col-title">Account</h4><ul class="footer-links"><li><a href="login.html" class="footer-link">My Account</a></li><li><a href="login.html" class="footer-link">Login</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><p class="footer-copy">&copy; 2025 Desa Munggur. Hak Cipta Dilindungi.</p><p class="footer-credit">Dibuat dengan ❤ untuk masyarakat Desa Munggur</p></div>
+    </div>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="../assets/js/firebase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Ambil data Komoditas dari Firestore
+    const komoditasGrid = document.getElementById('komoditas-grid');
+    
+    db.collection('komoditas').get().then((querySnapshot) => {
+      if (!querySnapshot.empty) {
+        komoditasGrid.innerHTML = '';
+        
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const card = document.createElement('div');
+          card.className = 'komoditas-card';
+          
+          card.innerHTML = `
+            <div style="width:72px;height:72px;margin:0 auto 14px;background:rgba(45,106,79,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+              <img src="${data.imageUrl || '../assets/images/foto1.svg'}" alt="${data.nama || 'Komoditas'}" style="width:100%;height:100%;object-fit:cover;" />
+            </div>
+            <p class="komoditas-name">${data.nama || 'Nama Komoditas'}</p>
+            <p class="komoditas-desc">${data.deskripsi || ''}</p>
+          `;
+          komoditasGrid.appendChild(card);
+        });
+      }
+    }).catch((error) => {
+      console.log("Error mengambil data komoditas: ", error);
+    });
+  </script>
+</body>
+</html>
