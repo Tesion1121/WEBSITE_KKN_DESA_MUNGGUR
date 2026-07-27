@@ -131,11 +131,11 @@
       <form id="login-form" autocomplete="off">
         <div class="form-group">
           <label class="form-label" for="login-email">Email Admin</label>
-          <input type="email" id="login-email" class="form-input" placeholder="desamunggur15@gmail.com" required autocomplete="email" />
+          <input type="email" id="login-email" class="form-input" placeholder="akun@example.com" required autocomplete="email" />
         </div>
         <div class="form-group">
           <label class="form-label" for="login-password">Password</label>
-          <input type="password" id="login-password" class="form-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="current-password" />
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
         </div>
 
         <div class="error-msg" id="error-msg">âŒ <span id="error-text">Email atau password salah.</span></div>
