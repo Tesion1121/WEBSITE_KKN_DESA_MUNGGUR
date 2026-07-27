@@ -195,12 +195,12 @@ validate_environment() {
         fi
     done
 
-    db_connection="$(read_env_value DB_CONNECTION)"
-    db_host="$(read_env_value DB_HOST)"
-    if [[ "${db_connection}" != "mysql" || "${db_host}" != "db" ]]; then
-        log_error "Deployment Docker memerlukan DB_CONNECTION=mysql dan DB_HOST=db di backend/.env."
-        exit 1
-    fi
+   ## db_connection="$(read_env_value DB_CONNECTION)"
+   ## db_host="$(read_env_value DB_HOST)"
+   ## if [[ "${db_connection}" != "mysql" || "${db_host}" != "db" ]]; then
+   ##     log_error "Deployment Docker memerlukan DB_CONNECTION=mysql dan DB_HOST=db di backend/.env."
+   ##     exit 1
+   ## fi
 
     if [[ -z "$(read_env_value DB_ROOT_PASSWORD)" ]]; then
         log_warn "DB_ROOT_PASSWORD belum diset; Compose akan memakai fallback bawaan. Tetapkan password kuat untuk production baru."
