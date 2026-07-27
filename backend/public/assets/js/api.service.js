@@ -1,9 +1,9 @@
 // ============================================================
 // API Service — Desa Munggur
-// Centrally manages calls to local Laravel backend
+// Centrally manages same-origin calls to the Laravel API
 // ============================================================
 
-const API_BASE_URL = "http://localhost:8000/api";
+const API_BASE_URL = "/api";
 
 const Api = {
   // Get storage token
