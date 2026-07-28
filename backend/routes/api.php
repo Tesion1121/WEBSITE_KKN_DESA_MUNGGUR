@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Perangkat Desa Management
     Route::post('/perangkat-desa', [PerangkatDesaController::class, 'store']);
+    Route::delete('/perangkat-desa/reset', [PerangkatDesaController::class, 'resetAll']);
 
     // Komoditas Management
     Route::post('/komoditas', [KomoditasController::class, 'store']);

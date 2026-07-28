@@ -38,4 +38,15 @@ class PerangkatDesaController extends Controller
             'data' => $member
         ]);
     }
+
+    public function resetAll()
+    {
+        $count = PerangkatDesa::count();
+        PerangkatDesa::truncate();
+
+        return response()->json([
+            'success' => true,
+            'message' => "Seluruh data perangkat desa ($count data) berhasil direset!",
+        ]);
+    }
 }

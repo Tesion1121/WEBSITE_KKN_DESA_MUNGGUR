@@ -368,10 +368,16 @@
     <div class="admin-section" id="section-struktur">
 
       <div class="admin-card">
-        <p class="admin-card-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="1" y="14" width="6" height="4" rx="1"/><rect x="9" y="14" width="6" height="4" rx="1"/><rect x="17" y="14" width="6" height="4" rx="1"/><path d="M12 6v4M4 14v-2h16v2"/></svg>
-          Input Perangkat Desa
-        </p>
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+          <p class="admin-card-title" style="margin-bottom:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="1" y="14" width="6" height="4" rx="1"/><rect x="9" y="14" width="6" height="4" rx="1"/><rect x="17" y="14" width="6" height="4" rx="1"/><path d="M12 6v4M4 14v-2h16v2"/></svg>
+            Input Perangkat Desa
+          </p>
+          <button class="btn btn-danger btn-sm" id="btn-reset-perangkat" onclick="resetPerangkat()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            Reset Semua Data
+          </button>
+        </div>
         <p style="font-size:0.82rem;color:#6c757d;margin-bottom:20px;">Isi data perangkat desa di bawah ini. Klik "Simpan" untuk menyimpan ke database.</p>
 
         <div class="org-member-list" id="perangkat-list">
@@ -840,6 +846,25 @@
     }).catch((e) => {
       showToast('Gagal memuat perangkat desa: ' + e.message, 'error');
     });
+  }
+
+  async function resetPerangkat() {
+    if (!confirm('Apakah Anda yakin ingin mereset SEMUA data perangkat desa?\n\nSemua nama dan foto perangkat akan dihapus dari database. Tindakan ini tidak bisa dibatalkan.')) return;
+
+    const btn = document.getElementById('btn-reset-perangkat');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner" style="border-top-color:#dc2626; border-color:rgba(220,38,38,0.3);"></span> Mereset...';
+
+    try {
+      const result = await Api.delete('/perangkat-desa/reset');
+      showToast(result.message || 'Data perangkat desa berhasil direset!');
+      loadPerangkat();
+    } catch (e) {
+      showToast('Gagal mereset data: ' + e.message, 'error');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Reset Semua Data`;
   }
 
   // ============================================================
