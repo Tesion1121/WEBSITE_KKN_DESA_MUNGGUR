@@ -253,6 +253,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="1" y="14" width="6" height="4" rx="1"/><rect x="9" y="14" width="6" height="4" rx="1"/><rect x="17" y="14" width="6" height="4" rx="1"/><path d="M12 6v4M4 14v-2h16v2"/></svg>
         Struktur Desa
       </button>
+      <button class="sidebar-link" id="tab-komoditas-btn" onclick="showTab('komoditas')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Komoditas
+      </button>
 
       <p class="sidebar-label">Navigasi</p>
       <a class="sidebar-link" href="/" target="_blank">
@@ -386,6 +390,64 @@
       </div>
     </div>
 
+    <!-- ===== TAB: KOMODITAS ===== -->
+    <div class="admin-section" id="section-komoditas">
+      <!-- Tambah / Edit Komoditas Form -->
+      <div class="admin-card">
+        <p class="admin-card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah / Edit Komoditas Unggulan
+        </p>
+
+        <input type="hidden" id="komoditas-edit-id" value="" />
+
+        <div class="form-row one-col">
+          <div class="form-group">
+            <label class="form-label">Nama Komoditas *</label>
+            <input type="text" class="form-input" id="komoditas-nama" placeholder="Contoh: Komoditas Padi" />
+          </div>
+        </div>
+
+        <div class="form-row one-col">
+          <div class="form-group">
+            <label class="form-label">Deskripsi Komoditas *</label>
+            <textarea class="form-textarea" id="komoditas-deskripsi" style="min-height: 100px;" placeholder="Tuliskan deskripsi lengkap mengenai komoditas, pola tanam, hasil panen, dan harga jual..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-row one-col">
+          <div class="form-group">
+            <label class="form-label">Upload Foto Komoditas (Maks 2MB)</label>
+            <input type="file" id="komoditas-image-file" accept="image/*" class="form-input" onchange="uploadImage(this, 'komoditas')" />
+            <div id="komoditas-upload-progress" class="form-hint" style="display:none; color: #2d6a4f; font-weight: 600; margin-top: 4px;">Mengunggah: 0%</div>
+            <input type="hidden" id="komoditas-image" />
+            <div id="komoditas-image-preview" style="margin-top: 12px; display: none;">
+              <img id="komoditas-preview-img" src="" style="max-height: 140px; border-radius: 8px; object-fit: cover; border: 1.5px solid #e5e7eb;" alt="Preview Foto Komoditas" />
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-save-komoditas" onclick="saveKomoditas()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Simpan Data
+          </button>
+          <button class="btn btn-secondary" onclick="resetKomoditasForm()">Batal / Reset</button>
+        </div>
+      </div>
+
+      <!-- Daftar Komoditas (Card Grid Layout) -->
+      <div class="admin-card">
+        <p class="admin-card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Daftar Komoditas Unggulan Desa
+        </p>
+        <div id="komoditas-table-wrap">
+          <p class="empty-state">Memuat data...</p>
+        </div>
+      </div>
+    </div>
+
 
 
   </main>
@@ -410,6 +472,7 @@
         document.getElementById('admin-email-display').textContent = res.user.email;
         loadUmkm();
         loadPerangkat();
+        loadKomoditas();
         // Tampilkan halaman setelah token terverifikasi sukses
         document.body.style.display = 'block';
       })
@@ -1194,12 +1257,14 @@
     document.getElementById('komoditas-edit-id').value = id;
     document.getElementById('komoditas-nama').value = data.nama || '';
     document.getElementById('komoditas-deskripsi').value = data.deskripsi || '';
-    document.getElementById('komoditas-image').value = data.imageUrl || '';
+    
+    const imgUrl = data.image_url || data.imageUrl || '';
+    document.getElementById('komoditas-image').value = imgUrl;
     
     const previewDiv = document.getElementById('komoditas-image-preview');
     const previewImg = document.getElementById('komoditas-preview-img');
-    if (data.imageUrl) {
-      previewImg.src = data.imageUrl;
+    if (imgUrl) {
+      previewImg.src = imgUrl;
       previewDiv.style.display = 'block';
     } else {
       previewDiv.style.display = 'none';
@@ -1269,42 +1334,33 @@
         return;
       }
 
-      let rows = '';
+      let cards = '';
       data.forEach((d) => {
-        rows += `
-          <tr>
-            <td>
-              <div style="position:relative; width:52px; height:52px; background:#f0f2f5; border-radius:8px; overflow:hidden;">
-                <img src="${d.image_url || d.imageUrl || ''}" alt="${d.nama}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center;">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
+        const imgUrl = d.image_url || d.imageUrl || '/assets/images/1.jpeg';
+        cards += `
+          <div style="background: #ffffff; border: 1.5px solid #e5e7eb; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+            <div style="width: 100%; height: 180px; background: #f0f2f5; position: relative; overflow: hidden;">
+              <img src="${imgUrl}" alt="${d.nama}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/images/1.jpeg'" />
+            </div>
+            <div style="padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <span class="badge badge-green" style="margin-bottom: 10px;">Komoditas Unggulan</span>
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; line-height: 1.3;">${d.nama || '—'}</h4>
+                <p style="font-size: 0.83rem; color: #4b5563; line-height: 1.6; margin-bottom: 16px; text-align: justify; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">${d.deskripsi || '—'}</p>
               </div>
-            </td>
-            <td><strong>${d.nama || 'â€”'}</strong></td>
-            <td>${d.deskripsi ? (d.deskripsi.length > 80 ? d.deskripsi.substring(0, 80) + '...' : d.deskripsi) : 'â€”'}</td>
-            <td>
-              <div class="td-actions">
-                <button class="btn btn-secondary btn-sm" onclick='editKomoditas(${d.id}, ${JSON.stringify(d).replace(/'/g, "&apos;")})'>Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteKomoditas(${d.id}, '${d.nama?.replace(/'/g, "\\'")}')">Hapus</button>
+              <div style="display: flex; gap: 8px; border-top: 1px solid #f3f4f6; padding-top: 14px; margin-top: auto;">
+                <button class="btn btn-secondary btn-sm" style="flex:1; justify-content:center;" onclick='editKomoditas(${d.id}, ${JSON.stringify(d).replace(/'/g, "&apos;")})'>Edit</button>
+                <button class="btn btn-danger btn-sm" style="flex:1; justify-content:center;" onclick="deleteKomoditas(${d.id}, '${d.nama?.replace(/'/g, "\\'")}')">Hapus</button>
               </div>
-            </td>
-          </tr>
+            </div>
+          </div>
         `;
       });
 
       wrap.innerHTML = `
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Foto</th>
-              <th>Nama Komoditas</th>
-              <th>Deskripsi</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
+          ${cards}
+        </div>
       `;
     }).catch((e) => {
       wrap.innerHTML = `<p class="empty-state" style="color: #dc2626;">Gagal memuat data: ${e.message}</p>`;
