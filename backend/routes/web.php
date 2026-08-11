@@ -52,6 +52,14 @@ Route::get('/komoditas', function () {
     return view('pages.komoditas');
 });
 
+Route::get('/berita', function () {
+    return view('pages.berita');
+});
+
+Route::get('/berita/{slug}', function () {
+    return view('pages.berita-detail');
+});
+
 Route::get('/login', function () {
     return view('pages.login');
 });

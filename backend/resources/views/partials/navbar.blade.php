@@ -10,6 +10,7 @@
     </a>
     <nav class="navbar-nav" id="main-nav">
       <a href="{{ url('/') }}" class="nav-link @if(request()->is('/')) active @endif" id="nav-home">Beranda</a>
+      <a href="{{ url('/berita') }}" class="nav-link @if(request()->is('berita*')) active @endif" id="nav-berita">Berita</a>
 
       <!-- Pemerintahan & Layanan -->
       <div class="nav-dropdown">
@@ -53,7 +54,6 @@
       </div>
     </nav>
     <div class="navbar-actions">
-      <a href="{{ url('/login') }}" class="btn-login" id="btn-login-header">Login</a>
       <button class="hamburger" id="hamburger-btn" aria-label="Toggle Menu">
         <span></span><span></span><span></span>
       </button>

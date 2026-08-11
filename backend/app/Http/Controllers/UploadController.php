@@ -17,8 +17,8 @@ class UploadController extends Controller
             // Store the file in public/uploads directory
             $path = $request->file('image')->store('uploads', 'public');
             
-            // Generate full URL
-            $url = asset('storage/' . $path);
+            // Gunakan path relatif agar berfungsi di semua environment
+            $url = '/storage/' . $path;
 
             return response()->json([
                 'success' => true,

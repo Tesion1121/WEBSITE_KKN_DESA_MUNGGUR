@@ -1,6 +1,7 @@
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobile-menu">
   <a href="{{ url('/') }}" class="mobile-nav-link">Beranda</a>
+  <a href="{{ url('/berita') }}" class="mobile-nav-link">Berita</a>
   <div style="padding: 10px 16px 4px; font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--color-accent); letter-spacing: 0.05em;">Pemerintahan & Layanan</div>
   <a href="{{ url('/profil-desa') }}" class="mobile-nav-link" style="padding-left: 28px;">Profil Desa</a>
   <a href="{{ url('/struktur-desa') }}" class="mobile-nav-link" style="padding-left: 28px;">Struktur Desa</a>
@@ -18,6 +19,4 @@
   <a href="{{ url('/kebudayaan-kuliner') }}" class="mobile-nav-link" style="padding-left: 28px;">Wisata & Budaya</a>
   <a href="{{ url('/komoditas') }}" class="mobile-nav-link" style="padding-left: 28px;">Komoditas</a>
   
-  <div style="height: 1px; background: #e5e7eb; margin: 15px 16px;"></div>
-  <a href="{{ url('/login') }}" class="mobile-nav-link mobile-login">Login</a>
 </div>

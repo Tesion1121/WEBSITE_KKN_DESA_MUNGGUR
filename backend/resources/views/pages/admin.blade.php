@@ -257,6 +257,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
         Komoditas
       </button>
+      <button class="sidebar-link" id="tab-berita-btn" onclick="showTab('berita')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6z"/></svg>
+        Berita
+      </button>
 
       <p class="sidebar-label">Navigasi</p>
       <a class="sidebar-link" href="/" target="_blank">
@@ -448,6 +452,96 @@
       </div>
     </div>
 
+    <!-- ===== TAB: BERITA ===== -->
+    <div class="admin-section" id="section-berita">
+
+      <!-- Tambah / Edit Berita Form -->
+      <div class="admin-card">
+        <p class="admin-card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah / Edit Berita
+        </p>
+
+        <input type="hidden" id="berita-edit-id" value="" />
+
+        <div class="form-row one-col">
+          <div class="form-group">
+            <label class="form-label">Judul Berita *</label>
+            <input type="text" class="form-input" id="berita-judul" placeholder="Masukkan judul berita" />
+          </div>
+        </div>
+
+        <div class="form-row one-col">
+          <div class="form-group">
+            <label class="form-label">Ringkasan <span style="font-weight:400;color:#9ca3af;">(Opsional — tampil di kartu preview)</span></label>
+            <textarea class="form-textarea" id="berita-ringkasan" style="min-height: 70px;" placeholder="Ringkasan singkat berita (maks 500 karakter)"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row one-col">
+          <div class="form-group">
+            <label class="form-label">Isi Berita *</label>
+            <textarea class="form-textarea" id="berita-isi" style="min-height: 200px;" placeholder="Tulis isi berita lengkap di sini..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Penulis <span style="font-weight:400;color:#9ca3af;">(Opsional)</span></label>
+            <input type="text" class="form-input" id="berita-penulis" placeholder="Nama penulis" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tanggal Terbit</label>
+            <input type="date" class="form-input" id="berita-tanggal" />
+          </div>
+        </div>
+
+        <div class="form-row one-col">
+          <div class="form-group">
+            <label class="form-label">Upload Foto Berita (Maks 2MB)</label>
+            <input type="file" id="berita-image-file" accept="image/*" class="form-input" onchange="uploadImage(this, 'berita')" />
+            <div id="berita-upload-progress" class="form-hint" style="display:none; color: #2d6a4f; font-weight: 600; margin-top: 4px;">Mengunggah: 0%</div>
+            <input type="hidden" id="berita-image" />
+            <div id="berita-image-preview" style="margin-top: 12px; display: none;">
+              <div style="position:relative;display:inline-block;">
+                <img id="berita-preview-img" src="" style="max-height: 160px; border-radius: 8px; object-fit: cover; border: 1.5px solid #e5e7eb;" alt="Preview Foto Berita" />
+                <button onclick="clearBeritaImage()" style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:rgba(0,0,0,0.6);border:none;border-radius:50%;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.9rem;" title="Hapus foto">&times;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row one-col">
+          <div class="form-group">
+            <label class="form-label" style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <input type="checkbox" id="berita-published" checked style="width:16px;height:16px;accent-color:var(--color-accent);" />
+              Publikasikan berita ini
+            </label>
+            <p class="form-hint">Jika dicentang, berita akan tampil di halaman publik.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-save-berita" onclick="saveBerita()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Simpan Berita
+          </button>
+          <button class="btn btn-secondary" onclick="resetBeritaForm()">Batal / Reset</button>
+        </div>
+      </div>
+
+      <!-- Daftar Berita -->
+      <div class="admin-card">
+        <p class="admin-card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6z"/></svg>
+          Daftar Berita
+        </p>
+        <div id="berita-table-wrap">
+          <p class="empty-state">Memuat data...</p>
+        </div>
+      </div>
+    </div>
+
 
 
   </main>
@@ -473,6 +567,7 @@
         loadUmkm();
         loadPerangkat();
         loadKomoditas();
+        loadBeritaAdmin();
         // Tampilkan halaman setelah token terverifikasi sukses
         document.body.style.display = 'block';
       })
@@ -503,7 +598,8 @@
       struktur: 'Struktur Desa',
       kebudayaan: 'Kelola Budaya & Wisata',
       kuliner: 'Kelola Kuliner Lokal',
-      komoditas: 'Kelola Komoditas'
+      komoditas: 'Kelola Komoditas',
+      berita: 'Kelola Berita'
     };
     document.getElementById('admin-page-title').textContent = titles[tab] || '';
   }
@@ -519,21 +615,23 @@
   }
 
   // ============================================================
-  // UMKM â€” CRUD
+  // UMKM — CRUD
   // ============================================================
+  const uploadingFolders = {};
+
   async function uploadImage(input, folder) {
     const file = input.files[0];
     if (!file) return;
 
     // Validasi Ukuran (Maksimal 2MB)
-    const maxSize = 2 * 1024 * 1024; // 2MB
+    const maxSize = 2 * 1024 * 1024;
     if (file.size > maxSize) {
       showToast('Ukuran file maksimal 2MB!', 'error');
-      input.value = ''; // Reset input
+      input.value = '';
       return;
     }
 
-    // Validasi Tipe File (Harus gambar)
+    // Validasi Tipe File
     if (!file.type.startsWith('image/')) {
       showToast('File harus berupa gambar (JPG, PNG, WebP, dll)!', 'error');
       input.value = '';
@@ -541,9 +639,18 @@
     }
 
     const progressDiv = document.getElementById(`${folder}-upload-progress`);
-    const urlInput = document.getElementById(`${folder}-image`);
-    const previewDiv = document.getElementById(`${folder}-image-preview`);
-    const previewImg = document.getElementById(`${folder}-preview-img`);
+    const urlInput    = document.getElementById(`${folder}-image`);
+    const previewDiv  = document.getElementById(`${folder}-image-preview`);
+    const previewImg  = document.getElementById(`${folder}-preview-img`);
+    const saveBtn     = document.getElementById(`btn-save-${folder}`);
+
+    // Kunci tombol simpan selama upload
+    uploadingFolders[folder] = true;
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn._origText = saveBtn.textContent;
+      saveBtn.textContent = 'Menunggu upload...';
+    }
 
     progressDiv.style.display = 'block';
     progressDiv.textContent = 'Mengunggah gambar...';
@@ -554,14 +661,13 @@
       if (result.success) {
         const downloadURL = result.data.url;
         urlInput.value = downloadURL;
-        
-        // Tampilkan preview
+
         if (previewDiv && previewImg) {
           previewImg.src = downloadURL;
           previewDiv.style.display = 'block';
         }
-        
-        progressDiv.textContent = 'Unggah selesai!';
+
+        progressDiv.textContent = '✓ Upload selesai! Silakan klik Simpan.';
         progressDiv.style.color = '#2d6a4f';
         showToast('Foto berhasil diunggah!');
       } else {
@@ -571,6 +677,13 @@
       showToast('Gagal mengunggah foto: ' + error.message, 'error');
       progressDiv.style.color = '#dc2626';
       progressDiv.textContent = 'Gagal mengunggah.';
+      urlInput.value = '';
+    } finally {
+      uploadingFolders[folder] = false;
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = saveBtn._origText || 'Simpan';
+      }
     }
   }
 
@@ -1365,6 +1478,151 @@
     }).catch((e) => {
       wrap.innerHTML = `<p class="empty-state" style="color: #dc2626;">Gagal memuat data: ${e.message}</p>`;
     });
+  }
+
+  // ============================================================
+  // BERITA — CRUD
+  // ============================================================
+  function loadBeritaAdmin() {
+    const wrap = document.getElementById('berita-table-wrap');
+    if (!wrap) return;
+    wrap.innerHTML = '<p class="empty-state">Memuat data...</p>';
+
+    Api.get('/admin/berita').then((data) => {
+      if (!data || data.length === 0) {
+        wrap.innerHTML = '<p class="empty-state">Belum ada berita. Tambahkan di atas.</p>';
+        return;
+      }
+
+      let rows = '';
+      data.forEach((d) => {
+        const tgl = d.tanggal_terbit ? new Date(d.tanggal_terbit).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' }) : '—';
+        const status = d.is_published
+          ? '<span style="background:rgba(45,106,79,0.1);color:#2d6a4f;padding:2px 10px;border-radius:999px;font-size:0.7rem;font-weight:700;">Publik</span>'
+          : '<span style="background:rgba(156,163,175,0.15);color:#6b7280;padding:2px 10px;border-radius:999px;font-size:0.7rem;font-weight:700;">Draft</span>';
+        const thumb = d.image_url
+          ? `<img src="${d.image_url}" style="width:48px;height:36px;object-fit:cover;border-radius:6px;border:1px solid #e5e7eb;" onerror="this.style.display='none'" />`
+          : `<div style="width:48px;height:36px;background:#f0f2f5;border-radius:6px;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" fill="none" stroke="#9ca3af" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>`;
+        rows += `
+          <tr>
+            <td style="padding:12px 16px;">${thumb}</td>
+            <td style="padding:12px 16px;font-weight:600;max-width:320px;">
+              <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px;" title="${d.judul}">${d.judul}</div>
+              ${d.penulis ? `<div style="font-size:0.72rem;color:#9ca3af;margin-top:2px;">${d.penulis}</div>` : ''}
+            </td>
+            <td style="padding:12px 16px;font-size:0.82rem;color:#6c757d;white-space:nowrap;">${tgl}</td>
+            <td style="padding:12px 16px;">${status}</td>
+            <td style="padding:12px 16px;">
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-secondary btn-sm" onclick='editBerita(${d.id}, ${JSON.stringify(d).replace(/'/g, "&apos;")})'>Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteBerita(${d.id}, '${d.judul?.replace(/'/g, "\\'")}')">Hapus</button>
+              </div>
+            </td>
+          </tr>`;
+      });
+
+      wrap.innerHTML = `
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+            <thead>
+              <tr style="border-bottom:2px solid #f0f2f5;">
+                <th style="padding:10px 16px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;font-weight:700;">Foto</th>
+                <th style="padding:10px 16px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;font-weight:700;">Judul</th>
+                <th style="padding:10px 16px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;font-weight:700;">Tanggal</th>
+                <th style="padding:10px 16px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;font-weight:700;">Status</th>
+                <th style="padding:10px 16px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;font-weight:700;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }).catch((e) => {
+      wrap.innerHTML = `<p class="empty-state" style="color:#dc2626;">Gagal memuat data: ${e.message}</p>`;
+    });
+  }
+
+  function resetBeritaForm() {
+    document.getElementById('berita-edit-id').value = '';
+    document.getElementById('berita-judul').value = '';
+    document.getElementById('berita-ringkasan').value = '';
+    document.getElementById('berita-isi').value = '';
+    document.getElementById('berita-penulis').value = '';
+    document.getElementById('berita-tanggal').value = '';
+    document.getElementById('berita-published').checked = true;
+    clearBeritaImage();
+    document.getElementById('btn-save-berita').textContent = 'Simpan Berita';
+  }
+
+  function clearBeritaImage() {
+    document.getElementById('berita-image').value = '';
+    document.getElementById('berita-image-file').value = '';
+    document.getElementById('berita-image-preview').style.display = 'none';
+    document.getElementById('berita-preview-img').src = '';
+  }
+
+  function editBerita(id, d) {
+    document.getElementById('berita-edit-id').value = id;
+    document.getElementById('berita-judul').value = d.judul || '';
+    document.getElementById('berita-ringkasan').value = d.ringkasan || '';
+    document.getElementById('berita-isi').value = d.isi || '';
+    document.getElementById('berita-penulis').value = d.penulis || '';
+    document.getElementById('berita-tanggal').value = d.tanggal_terbit ? d.tanggal_terbit.substring(0, 10) : '';
+    document.getElementById('berita-published').checked = !!d.is_published;
+    if (d.image_url) {
+      document.getElementById('berita-image').value = d.image_url;
+      document.getElementById('berita-preview-img').src = d.image_url;
+      document.getElementById('berita-image-preview').style.display = 'block';
+    } else {
+      clearBeritaImage();
+    }
+    document.getElementById('btn-save-berita').textContent = 'Update Berita';
+    document.getElementById('section-berita').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  async function saveBerita() {
+    const judul = document.getElementById('berita-judul').value.trim();
+    const isi = document.getElementById('berita-isi').value.trim();
+    if (!judul) { showToast('Judul berita wajib diisi!', 'error'); return; }
+    if (!isi) { showToast('Isi berita wajib diisi!', 'error'); return; }
+
+    const editId = document.getElementById('berita-edit-id').value;
+    const payload = {
+      judul,
+      isi,
+      ringkasan: document.getElementById('berita-ringkasan').value.trim() || null,
+      penulis: document.getElementById('berita-penulis').value.trim() || null,
+      tanggal_terbit: document.getElementById('berita-tanggal').value || null,
+      image_url: document.getElementById('berita-image').value || null,
+      is_published: document.getElementById('berita-published').checked,
+    };
+
+    const btn = document.getElementById('btn-save-berita');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+
+    try {
+      if (editId) {
+        await Api.put(`/berita/${editId}`, payload);
+        showToast('Berita berhasil diupdate!');
+      } else {
+        await Api.post('/berita', payload);
+        showToast('Berita berhasil ditambahkan!');
+      }
+      resetBeritaForm();
+      loadBeritaAdmin();
+    } catch (e) {
+      showToast('Gagal menyimpan: ' + (e.message || 'Error'), 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = editId ? 'Update Berita' : 'Simpan Berita';
+    }
+  }
+
+  function deleteBerita(id, judul) {
+    if (!confirm(`Hapus berita "${judul}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+    Api.delete(`/berita/${id}`)
+      .then(() => { showToast('Berita berhasil dihapus.'); loadBeritaAdmin(); })
+      .catch((e) => showToast('Gagal hapus: ' + e.message, 'error'));
   }
 </script>
 </body>
