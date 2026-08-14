@@ -27,6 +27,13 @@ class Berita extends Model
         'tanggal_terbit' => 'date',
     ];
 
+    protected $appends = ['imageUrl'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->attributes['image_url'] ?? null;
+    }
+
     /**
      * Auto-generate slug dari judul saat membuat berita baru.
      */

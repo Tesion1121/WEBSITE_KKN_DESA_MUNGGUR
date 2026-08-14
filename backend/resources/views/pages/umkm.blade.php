@@ -278,8 +278,11 @@
   function loadUmkmData() {
     const grid = document.getElementById('umkm-grid');
 
-    fetch('/api/umkm')
-      .then(res => res.json())
+    fetch('/api/umkm', { headers: { 'Accept': 'application/json' } })
+      .then(res => {
+        if (!res.ok) throw new Error(`Server error ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         umkmData = data || [];
         if (umkmData.length === 0) {

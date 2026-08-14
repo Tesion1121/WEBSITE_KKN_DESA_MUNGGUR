@@ -149,8 +149,11 @@
   document.addEventListener('DOMContentLoaded', function() {
     const grid = document.getElementById('komoditas-grid');
 
-    fetch('/api/komoditas')
-      .then(res => res.json())
+    fetch('/api/komoditas', { headers: { 'Accept': 'application/json' } })
+      .then(res => {
+        if (!res.ok) throw new Error(`Server error ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         if (!Array.isArray(data) || data.length === 0) {
           grid.innerHTML = `

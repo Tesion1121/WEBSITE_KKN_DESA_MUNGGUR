@@ -251,22 +251,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const isLoggedIn = !!localStorage.getItem("admin_token");
   if (isLoggedIn) {
     // Select all login buttons/links (desktop header, mobile header, and footer)
-    const loginLinks = document.querySelectorAll('a.btn-login, a.mobile-login, a[href$="login.html"]');
+    const loginLinks = document.querySelectorAll('a.btn-login, a.mobile-login, a[href$="/login"], a[href$="login.html"]');
     loginLinks.forEach(link => {
       if (link) {
         link.textContent = 'Keluar (Logout)';
         link.addEventListener('click', function(e) {
           e.preventDefault();
-          // Hapus token dari localStorage
           localStorage.removeItem("admin_token");
-          // Muat ulang halaman untuk memperbarui status UI
-          window.location.reload();
+          window.location.href = '/login';
         });
       }
     });
 
     // Ubah link "My Account" di footer menjadi "Panel Admin"
-    const adminLinks = document.querySelectorAll('a[href$="admin.html"]');
+    const adminLinks = document.querySelectorAll('a[href$="/admin"], a[href$="admin.html"]');
     adminLinks.forEach(link => {
       if (link) {
         link.textContent = 'Panel Admin';

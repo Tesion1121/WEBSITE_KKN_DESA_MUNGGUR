@@ -26,6 +26,34 @@ const Api = {
     return !!this.getToken();
   },
 
+  // Parse response safely — throws descriptive error if not valid JSON
+  async parseResponse(response, endpoint) {
+    const contentType = response.headers.get("content-type") || "";
+
+    // If response is not OK, try to extract error message
+    if (!response.ok) {
+      if (contentType.includes("application/json")) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Server error (${response.status})`);
+      }
+      // Server returned HTML or other non-JSON (e.g. Laravel error page)
+      throw new Error(`Server error ${response.status} pada ${endpoint}`);
+    }
+
+    // Response is OK — parse JSON safely
+    if (contentType.includes("application/json")) {
+      return response.json();
+    }
+
+    // Response is OK but not JSON (shouldn't happen, but handle gracefully)
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error(`Response dari ${endpoint} bukan format JSON yang valid`);
+    }
+  },
+
   // Common fetch function
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
@@ -42,6 +70,9 @@ const Api = {
       headers["Content-Type"] = "application/json";
     }
 
+    // Always request JSON response from Laravel
+    headers["Accept"] = "application/json";
+
     const config = {
       ...options,
       headers
@@ -53,7 +84,7 @@ const Api = {
       // Handle unauthorized
       if (response.status === 401 && endpoint !== "/login") {
         this.removeToken();
-        window.location.href = "login.html";
+        window.location.href = "/login";
         return;
       }
 
@@ -67,7 +98,7 @@ const Api = {
   // GET Request
   async get(endpoint) {
     const res = await this.request(endpoint, { method: "GET" });
-    return res.json();
+    return this.parseResponse(res, endpoint);
   },
 
   // POST Request
@@ -77,7 +108,7 @@ const Api = {
       method: "POST",
       body
     });
-    return res.json();
+    return this.parseResponse(res, endpoint);
   },
 
   // PUT Request
@@ -86,13 +117,13 @@ const Api = {
       method: "PUT",
       body: JSON.stringify(data)
     });
-    return res.json();
+    return this.parseResponse(res, endpoint);
   },
 
   // DELETE Request
   async delete(endpoint) {
     const res = await this.request(endpoint, { method: "DELETE" });
-    return res.json();
+    return this.parseResponse(res, endpoint);
   },
 
   // Upload Image File
@@ -104,6 +135,6 @@ const Api = {
       method: "POST",
       body: formData
     });
-    return res.json();
+    return this.parseResponse(res, "/upload");
   }
 };

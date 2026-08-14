@@ -505,8 +505,11 @@
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/perangkat-desa')
-      .then(res => res.json())
+    fetch('/api/perangkat-desa', { headers: { 'Accept': 'application/json' } })
+      .then(res => {
+        if (!res.ok) throw new Error(`Server error ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         // Terapkan default dulu
         Object.keys(defaultData).forEach(key => {

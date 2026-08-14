@@ -558,7 +558,7 @@
   // AUTH GUARD â€” Redirect ke login jika belum login
   // ============================================================
   if (!Api.isLoggedIn()) {
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   } else {
     // Verifikasi token
     Api.get('/check-token')
@@ -573,7 +573,7 @@
       })
       .catch(() => {
         Api.removeToken();
-        window.location.href = 'login.html';
+        window.location.href = '/login';
       });
   }
 
@@ -581,7 +581,7 @@
   document.getElementById('btn-logout').addEventListener('click', () => {
     Api.post('/logout', {}).finally(() => {
       Api.removeToken();
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     });
   });
 
@@ -771,7 +771,7 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="loading-spinner"></span> Menyimpan...';
 
-    const data = { nama, kategori, deskripsi, alamat, harga, kontak, imageUrl };
+    const data = { nama, kategori, deskripsi, alamat, harga, kontak, imageUrl, image_url: imageUrl };
 
     try {
       if (editId) {
@@ -1044,306 +1044,7 @@
   }
 
   // ============================================================
-  // KEBUDAYAAN & WISATA â€” CRUD
-  // ============================================================
-  function resetKebudayaanForm() {
-    document.getElementById('kebudayaan-edit-id').value = '';
-    document.getElementById('kebudayaan-nama').value = '';
-    document.getElementById('kebudayaan-deskripsi').value = '';
-    document.getElementById('kebudayaan-image').value = '';
-    
-    const fileInput = document.getElementById('kebudayaan-image-file');
-    if (fileInput) fileInput.value = '';
-    const progressDiv = document.getElementById('kebudayaan-upload-progress');
-    if (progressDiv) progressDiv.style.display = 'none';
-    const previewDiv = document.getElementById('kebudayaan-image-preview');
-    if (previewDiv) previewDiv.style.display = 'none';
-    const previewImg = document.getElementById('kebudayaan-preview-img');
-    if (previewImg) previewImg.src = '';
-    
-    document.getElementById('btn-save-kebudayaan').innerHTML = `
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      Simpan Data
-    `;
-  }
-
-  function editKebudayaan(id, data) {
-    document.getElementById('kebudayaan-edit-id').value = id;
-    document.getElementById('kebudayaan-nama').value = data.nama_kegiatan || '';
-    document.getElementById('kebudayaan-deskripsi').value = data.deskripsi || '';
-    
-    const imgUrl = data.image_url || data.imageUrl || '';
-    document.getElementById('kebudayaan-image').value = imgUrl;
-    
-    const previewDiv = document.getElementById('kebudayaan-image-preview');
-    const previewImg = document.getElementById('kebudayaan-preview-img');
-    if (imgUrl) {
-      previewImg.src = imgUrl;
-      previewDiv.style.display = 'block';
-    } else {
-      previewDiv.style.display = 'none';
-    }
-    
-    document.getElementById('btn-save-kebudayaan').innerHTML = `
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      Update Data
-    `;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  async function deleteKebudayaan(id, nama) {
-    if (!confirm(`Hapus data "${nama}"? Tindakan ini tidak bisa dibatalkan.`)) return;
-    try {
-      await Api.delete(`/kebudayaan/${id}`);
-      showToast('Data berhasil dihapus.');
-      loadKebudayaan();
-    } catch (e) {
-      showToast('Gagal menghapus: ' + e.message, 'error');
-    }
-  }
-
-  async function saveKebudayaan() {
-    const nama_kegiatan = document.getElementById('kebudayaan-nama').value.trim();
-    const deskripsi = document.getElementById('kebudayaan-deskripsi').value.trim();
-    const imageUrl = document.getElementById('kebudayaan-image').value.trim();
-    const editId = document.getElementById('kebudayaan-edit-id').value;
-
-    if (!nama_kegiatan || !deskripsi) {
-      showToast('Nama kegiatan dan deskripsi wajib diisi!', 'error');
-      return;
-    }
-
-    const btn = document.getElementById('btn-save-kebudayaan');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading-spinner"></span> Menyimpan...';
-
-    const data = { nama_kegiatan, deskripsi, imageUrl };
-
-    try {
-      if (editId) {
-        await Api.put(`/kebudayaan/${editId}`, data);
-        showToast('Data berhasil diupdate!');
-      } else {
-        await Api.post('/kebudayaan', data);
-        showToast('Data berhasil ditambahkan!');
-      }
-      resetKebudayaanForm();
-      loadKebudayaan();
-    } catch (e) {
-      showToast('Gagal menyimpan: ' + e.message, 'error');
-    }
-
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Simpan Data`;
-  }
-
-  function loadKebudayaan() {
-    const wrap = document.getElementById('kebudayaan-table-wrap');
-    if (!wrap) return;
-    wrap.innerHTML = '<p class="empty-state">Memuat data...</p>';
-
-    Api.get('/kebudayaan').then((data) => {
-      if (!data || data.length === 0) {
-        wrap.innerHTML = '<p class="empty-state">Belum ada data kebudayaan & wisata. Tambahkan di atas.</p>';
-        return;
-      }
-
-      let rows = '';
-      data.forEach((d) => {
-        rows += `
-          <tr>
-            <td>
-              <div style="position:relative; width:52px; height:52px; background:#f0f2f5; border-radius:8px; overflow:hidden;">
-                <img src="${d.image_url || d.imageUrl || ''}" alt="${d.nama_kegiatan}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center;">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-              </div>
-            </td>
-            <td><strong>${d.nama_kegiatan || 'â€”'}</strong></td>
-            <td>${d.deskripsi ? (d.deskripsi.length > 80 ? d.deskripsi.substring(0, 80) + '...' : d.deskripsi) : 'â€”'}</td>
-            <td>
-              <div class="td-actions">
-                <button class="btn btn-secondary btn-sm" onclick='editKebudayaan(${d.id}, ${JSON.stringify(d).replace(/'/g, "&apos;")})'>Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteKebudayaan(${d.id}, '${d.nama_kegiatan?.replace(/'/g, "\\'")}')">Hapus</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      });
-
-      wrap.innerHTML = `
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Foto</th>
-              <th>Nama Kegiatan</th>
-              <th>Deskripsi</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      `;
-    }).catch((e) => {
-      wrap.innerHTML = `<p class="empty-state" style="color: #dc2626;">Gagal memuat data: ${e.message}</p>`;
-    });
-  }
-
-  // ============================================================
-  // KULINER LOKAL â€” CRUD
-  // ============================================================
-  function resetKulinerForm() {
-    document.getElementById('kuliner-edit-id').value = '';
-    document.getElementById('kuliner-nama').value = '';
-    document.getElementById('kuliner-deskripsi').value = '';
-    document.getElementById('kuliner-alamat').value = '';
-    document.getElementById('kuliner-image').value = '';
-    
-    const fileInput = document.getElementById('kuliner-image-file');
-    if (fileInput) fileInput.value = '';
-    const progressDiv = document.getElementById('kuliner-upload-progress');
-    if (progressDiv) progressDiv.style.display = 'none';
-    const previewDiv = document.getElementById('kuliner-image-preview');
-    if (previewDiv) previewDiv.style.display = 'none';
-    const previewImg = document.getElementById('kuliner-preview-img');
-    if (previewImg) previewImg.src = '';
-    
-    document.getElementById('btn-save-kuliner').innerHTML = `
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      Simpan Data
-    `;
-  }
-
-  function editKuliner(id, data) {
-    document.getElementById('kuliner-edit-id').value = id;
-    document.getElementById('kuliner-nama').value = data.nama || '';
-    document.getElementById('kuliner-deskripsi').value = data.deskripsi || '';
-    document.getElementById('kuliner-alamat').value = data.alamat || '';
-    
-    const imgUrl = data.image_url || data.imageUrl || '';
-    document.getElementById('kuliner-image').value = imgUrl;
-    
-    const previewDiv = document.getElementById('kuliner-image-preview');
-    const previewImg = document.getElementById('kuliner-preview-img');
-    if (imgUrl) {
-      previewImg.src = imgUrl;
-      previewDiv.style.display = 'block';
-    } else {
-      previewDiv.style.display = 'none';
-    }
-    
-    document.getElementById('btn-save-kuliner').innerHTML = `
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      Update Data
-    `;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  async function deleteKuliner(id, nama) {
-    if (!confirm(`Hapus kuliner "${nama}"? Tindakan ini tidak bisa dibatalkan.`)) return;
-    try {
-      await Api.delete(`/kuliner/${id}`);
-      showToast('Kuliner berhasil dihapus.');
-      loadKuliner();
-    } catch (e) {
-      showToast('Gagal menghapus: ' + e.message, 'error');
-    }
-  }
-
-  async function saveKuliner() {
-    const nama = document.getElementById('kuliner-nama').value.trim();
-    const deskripsi = document.getElementById('kuliner-deskripsi').value.trim();
-    const alamat = document.getElementById('kuliner-alamat').value.trim();
-    const imageUrl = document.getElementById('kuliner-image').value.trim();
-    const editId = document.getElementById('kuliner-edit-id').value;
-
-    if (!nama || !deskripsi || !alamat) {
-      showToast('Nama kuliner, deskripsi, dan alamat wajib diisi!', 'error');
-      return;
-    }
-
-    const btn = document.getElementById('btn-save-kuliner');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading-spinner"></span> Menyimpan...';
-
-    const data = { nama, deskripsi, alamat, imageUrl };
-
-    try {
-      if (editId) {
-        await Api.put(`/kuliner/${editId}`, data);
-        showToast('Kuliner berhasil diupdate!');
-      } else {
-        await Api.post('/kuliner', data);
-        showToast('Kuliner berhasil ditambahkan!');
-      }
-      resetKulinerForm();
-      loadKuliner();
-    } catch (e) {
-      showToast('Gagal menyimpan: ' + e.message, 'error');
-    }
-
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Simpan Data`;
-  }
-
-  function loadKuliner() {
-    const wrap = document.getElementById('kuliner-table-wrap');
-    if (!wrap) return;
-    wrap.innerHTML = '<p class="empty-state">Memuat data...</p>';
-
-    Api.get('/kuliner').then((data) => {
-      if (!data || data.length === 0) {
-        wrap.innerHTML = '<p class="empty-state">Belum ada data kuliner lokal. Tambahkan di atas.</p>';
-        return;
-      }
-
-      let rows = '';
-      data.forEach((d) => {
-        rows += `
-          <tr>
-            <td>
-              <div style="position:relative; width:52px; height:52px; background:#f0f2f5; border-radius:8px; overflow:hidden;">
-                <img src="${d.image_url || d.imageUrl || ''}" alt="${d.nama}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center;">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-              </div>
-            </td>
-            <td><strong>${d.nama || 'â€”'}</strong></td>
-            <td>${d.alamat || 'â€”'}</td>
-            <td>${d.deskripsi ? (d.deskripsi.length > 80 ? d.deskripsi.substring(0, 80) + '...' : d.deskripsi) : 'â€”'}</td>
-            <td>
-              <div class="td-actions">
-                <button class="btn btn-secondary btn-sm" onclick='editKuliner(${d.id}, ${JSON.stringify(d).replace(/'/g, "&apos;")})'>Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteKuliner(${d.id}, '${d.nama?.replace(/'/g, "\\'")}')">Hapus</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      });
-
-      wrap.innerHTML = `
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Foto</th>
-              <th>Nama Kuliner</th>
-              <th>Alamat</th>
-              <th>Deskripsi</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      `;
-    }).catch((e) => {
-      wrap.innerHTML = `<p class="empty-state" style="color: #dc2626;">Gagal memuat data: ${e.message}</p>`;
-    });
-  }
-
-  // ============================================================
-  // KOMODITAS â€” CRUD
+  // KOMODITAS — CRUD
   // ============================================================
   function resetKomoditasForm() {
     document.getElementById('komoditas-edit-id').value = '';
@@ -1416,7 +1117,7 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="loading-spinner"></span> Menyimpan...';
 
-    const data = { nama, deskripsi, imageUrl };
+    const data = { nama, deskripsi, imageUrl, image_url: imageUrl };
 
     try {
       if (editId) {

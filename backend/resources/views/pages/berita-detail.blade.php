@@ -221,7 +221,7 @@
       return;
     }
 
-    fetch(`/api/berita/${slug}`)
+    fetch(`/api/berita/${slug}`, { headers: { 'Accept': 'application/json' } })
       .then(res => {
         if (!res.ok) throw new Error('not found');
         return res.json();
@@ -277,8 +277,11 @@
   }
 
   function loadRelated(currentId) {
-    fetch('/api/berita?page=1')
-      .then(res => res.json())
+    fetch('/api/berita?page=1', { headers: { 'Accept': 'application/json' } })
+      .then(res => {
+        if (!res.ok) throw new Error(`Server error ${res.status}`);
+        return res.json();
+      })
       .then(resp => {
         const grid = document.getElementById('related-grid');
         if (!grid) return;

@@ -289,8 +289,11 @@
     paginationWrap.style.display = 'none';
     pageInfo.style.display = 'none';
 
-    fetch(`/api/berita?page=${page}`)
-      .then(res => res.json())
+    fetch(`/api/berita?page=${page}`, { headers: { 'Accept': 'application/json' } })
+      .then(res => {
+        if (!res.ok) throw new Error(`Server error ${res.status}`);
+        return res.json();
+      })
       .then(resp => {
         const grid = document.getElementById('berita-grid');
         const data = resp.data || [];

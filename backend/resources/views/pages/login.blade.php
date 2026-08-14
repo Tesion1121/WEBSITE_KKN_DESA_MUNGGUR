@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -154,7 +154,7 @@
   <script>
     // Jika sudah login, redirect ke admin
     if (Api.isLoggedIn()) {
-      window.location.href = 'admin.html';
+      window.location.href = '/admin';
     }
 
     const form = document.getElementById('login-form');
@@ -176,7 +176,7 @@
         if (res.token) {
           Api.saveToken(res.token);
           // Berhasil login â†’ redirect ke admin
-          window.location.href = 'admin.html';
+          window.location.href = '/admin';
         } else {
           throw new Error(res.message || 'Email atau password salah.');
         }

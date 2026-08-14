@@ -45,11 +45,16 @@ class BeritaController extends Controller
             'judul'          => 'required|string|max:255',
             'isi'            => 'required|string',
             'ringkasan'      => 'nullable|string|max:500',
+            'imageUrl'       => 'nullable|string|max:2048',
             'image_url'      => 'nullable|string|max:2048',
             'penulis'        => 'nullable|string|max:100',
             'tanggal_terbit' => 'nullable|date',
             'is_published'   => 'nullable|boolean',
         ]);
+
+        $imageUrl = $request->input('imageUrl') ?? $request->input('image_url') ?? null;
+        $validated['image_url'] = $imageUrl;
+        unset($validated['imageUrl']);
 
         $berita = Berita::create($validated);
 
@@ -72,11 +77,16 @@ class BeritaController extends Controller
             'judul'          => 'required|string|max:255',
             'isi'            => 'required|string',
             'ringkasan'      => 'nullable|string|max:500',
+            'imageUrl'       => 'nullable|string|max:2048',
             'image_url'      => 'nullable|string|max:2048',
             'penulis'        => 'nullable|string|max:100',
             'tanggal_terbit' => 'nullable|date',
             'is_published'   => 'nullable|boolean',
         ]);
+
+        $imageUrl = $request->input('imageUrl') ?? $request->input('image_url') ?? null;
+        $validated['image_url'] = $imageUrl;
+        unset($validated['imageUrl']);
 
         // Regenerate slug jika judul berubah
         if ($berita->judul !== $validated['judul']) {
